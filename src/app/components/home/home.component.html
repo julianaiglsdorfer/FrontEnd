@@ -1,0 +1,61 @@
+<div style="margin-bottom: 30px;">
+  <form [formGroup]="postingForm" (ngSubmit)="addPosting()">
+    <div style="float: left; margin-right: 5px;">
+      <input id=emotion type="text" name="emotion"
+             class="form-control" placeholder="Emoji"
+             style="width: 75px; margin-right: 2px; float:left;"
+             formControlName="emotion" required>
+      <button (click)="toggleEmojiPicker()" type="button" mat-mini-fab style="float: left;">
+        <mat-icon>emoji_emotions</mat-icon>
+      </button>
+      <emoji-mart class="emoji-mart" *ngIf="toggled"
+                  emoji="point_up" set="apple"
+                  [isNative]="true"
+                  [style]="{position: 'absolute'}"
+                  (emojiSelect)="addEmoji($event)"></emoji-mart>
+    </div>
+
+    <div style="float: left; margin-right: 5px;">
+      <input id="content" type="text"
+             placeholder="Insert Posting Content"
+             class="form-control" formControlName="content">
+    </div>
+
+    <button mat-raised-button color="primary" type="submit">Posten</button>
+
+  </form>
+</div>
+<div class="panel-heading">
+  <span class="lead">Search Postings</span>
+</div>
+<div style="margin-bottom: 30px;">
+  <input (keydown.enter)="searchPostings($event)"
+         [(ngModel)]="searchValue" type="text"
+         id="searchKey" class="form-control"
+         placeholder="Search Box" />
+</div>
+<div class="panel-heading">
+  <span class="lead">List of Postings</span>
+</div>
+<div class="tablecontainer">
+  <table class="table table-hover">
+    <thead>
+    <tr>
+      <th>Post Id</th>
+      <th>Content</th>
+      <th>Emotion</th>
+      <th>Date</th>
+      <th>User</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr *ngFor="let post of postings">
+      <td><span>{{post.postingId}}</span></td>
+      <td><span>{{post.content}}</span></td>
+      <td><span>{{post.emotion}}</span></td>
+      <td><span>{{post.creationDate}}</span></td>
+      <td><span>{{post.userId}}</span></td>
+    </tr>
+    </tbody>
+  </table>
+</div>

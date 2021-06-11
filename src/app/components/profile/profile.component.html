@@ -1,0 +1,17 @@
+<div>
+  <h4>Followed users</h4>
+  <div style="width:400px; height:200px; overflow:auto;">
+    <table cellspacing="0" cellpadding="1" border="1" width="380">
+      <colgroup>
+        <col span="1" style="width: 75%;">
+        <col span="1" style="width: 15%;">
+      </colgroup>
+      <tr *ngFor="let user of followedUsers">
+        <td style="padding-left: 5pt">{{user.email}}</td>
+        <td style="text-align: center">
+          <button (click)="unfollowUser(user)">Unfollow</button>
+        </td>
+      </tr>
+    </table>
+  </div>
+</div>

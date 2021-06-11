@@ -1,4 +1,6 @@
 import { Component } from '@angular/core';
+import {User} from "./models/user";
+import {AuthentificationService} from "./services/authentification.service";
 
 @Component({
   selector: 'app-root',
@@ -6,5 +8,11 @@ import { Component } from '@angular/core';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent {
-  title = 'DKE-FrontEnd';
+  currentUser: User | undefined;
+
+  constructor(
+    private authentificationService: AuthentificationService
+  ) {
+    this.authentificationService.currentUser.subscribe(x => this.currentUser = x);
+  }
 }
