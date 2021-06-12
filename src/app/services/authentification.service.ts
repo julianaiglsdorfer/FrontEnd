@@ -31,7 +31,7 @@ export class AuthentificationService {
   public get currentNeo4jUserValue(): Neo4jUser {
     let x = new Neo4jUser();
     x.id = 0;
-    x.email = this.currentUserValue.username;
+    x.username = this.currentUserValue.username;
     return x;
   }
 
@@ -46,15 +46,14 @@ export class AuthentificationService {
       .toPromise()
       .then(
         (user) => {
-          console.error('successful login');
           // store user details and jwt token in local storage to keep user logged in between page refreshes
           localStorage.setItem('currentUser', JSON.stringify(user));
           this.currentUserSubject.next(user);
           this.router.navigate([this.returnUrl]);
         },
         (error) => {
-          console.error('error while logging in')
-          this.alertService.error(error);
+          // TODO check error code
+          this.alertService.error('Username or password is false');
         }
       );
   }
@@ -62,7 +61,6 @@ export class AuthentificationService {
   logout() {
     // remove user from local storage and set current user to null
     localStorage.removeItem('currentUser');
-    // this.currentUserSubject.unsubscribe();
-
+    this.currentUserSubject.next(null);
   }
 }

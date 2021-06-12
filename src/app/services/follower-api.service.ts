@@ -1,28 +1,34 @@
 import { Injectable } from '@angular/core';
-import {Observable} from "rxjs";
+import {BehaviorSubject, Observable} from "rxjs";
 import {Neo4jUser} from "../models/neo4jUser";
 import {HttpClient} from "@angular/common/http";
+import {AuthentificationService} from "./authentification.service";
 
 @Injectable({
   providedIn: 'root'
 })
 export class FollowerApiService {
 
+  $followedNeo4jUsers: BehaviorSubject<Neo4jUser[]>;
+
   readonly URL_FOLLOWERSERVICE = 'http://localhost:8081/followservice';
 
-  constructor(private httpClient: HttpClient) { }
+  constructor(private httpClient: HttpClient,
+              private authentificationService: AuthentificationService) {
+    this.$followedNeo4jUsers = new BehaviorSubject<Neo4jUser[]>([]);
+  }
 
   getFollowers(user: string): Observable<Neo4jUser> {
     const list = this.httpClient.get<Neo4jUser>(this.URL_FOLLOWERSERVICE + '/getFollowers?user=' + user);
     return list;
   }
 
-  getFollowedUsers(user: string): Observable<Neo4jUser[]> {
-    return this.httpClient.get<Neo4jUser[]>(this.URL_FOLLOWERSERVICE + '/getFollowedUsers?user=' + user);
+  getFollowedUsers(user: string): void {
+    this.httpClient.get<Neo4jUser[]>(this.URL_FOLLOWERSERVICE + '/getFollowedUsers?user=' + user)
+      .subscribe(followedUsers => this.$followedNeo4jUsers.next(followedUsers));
   }
 
   createNewUser(user: Neo4jUser): boolean {
-    console.error('creating new user');
 
     this.httpClient.put<Neo4jUser>(this.URL_FOLLOWERSERVICE + '/newUser', user).subscribe( (newUser) => console.error(newUser));
     // TODO check HTTP status
@@ -30,7 +36,6 @@ export class FollowerApiService {
   }
 
   addFollowRelationship(fromUser: Neo4jUser, toUser: Neo4jUser): boolean {
-    console.error('adding relationship');
 
     const users: Neo4jUser[] = [fromUser, toUser];
     this.httpClient.post(this.URL_FOLLOWERSERVICE + '/addRelationship', users).subscribe((response) => console.error(response));
@@ -39,11 +44,11 @@ export class FollowerApiService {
   }
 
   removeFollowRelationship(fromUser: Neo4jUser, toUser: Neo4jUser): boolean {
-    console.error('removing relationship');
 
     const users: Neo4jUser[] = [fromUser, toUser];
     this.httpClient.post(this.URL_FOLLOWERSERVICE + '/removeRelationship', users).subscribe((response) => console.error(response));
     // TODO check HTTP status
+    this.getFollowedUsers(fromUser.username);
     return true;
   }
 }

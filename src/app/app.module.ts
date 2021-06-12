@@ -18,6 +18,7 @@ import {MatIconModule} from "@angular/material/icon";
 import {PickerModule} from "@ctrl/ngx-emoji-mart";
 import { NavbarComponent } from './components/navbar/navbar.component';
 import { ProfileComponent } from './components/profile/profile.component';
+import { PostItemComponent } from './components/post-item/post-item.component';
 
 @NgModule({
   declarations: [
@@ -28,7 +29,8 @@ import { ProfileComponent } from './components/profile/profile.component';
     UserComponent,
     AlertComponent,
     NavbarComponent,
-    ProfileComponent
+    ProfileComponent,
+    PostItemComponent
   ],
   imports: [
     BrowserModule,

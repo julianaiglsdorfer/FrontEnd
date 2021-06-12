@@ -33,9 +33,8 @@ export class HomeComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.postingApiService.getPostings().subscribe(
-      response => this.handleSuccessfulResponse(response),
-    );
+    this.postingApiService.getPostings();
+    this.postingApiService.$postings.subscribe(allPostings => this.postings = allPostings);
   }
 
   handleSuccessfulResponse(response: Posting[]) {

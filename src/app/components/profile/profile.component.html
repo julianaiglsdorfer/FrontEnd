@@ -1,13 +1,28 @@
 <div>
+  <h1>My Profile</h1>
+  <table class="profile-table" cellspacing="0" cellpadding="1" width="200">
+    <tr>
+      <td><span style="font-weight:bold">Username:</span></td>
+      <td>{{currentUser.username}}</td>
+    </tr>
+    <tr>
+      <td><span style="font-weight:bold">First Name:</span></td>
+      <td>{{currentUser.firstName}}</td>
+    </tr>
+    <tr>
+      <td><span style="font-weight:bold">Last Name:</span></td>
+      <td>{{currentUser.lastName}}</td>
+    </tr>
+  </table>
   <h4>Followed users</h4>
   <div style="width:400px; height:200px; overflow:auto;">
-    <table cellspacing="0" cellpadding="1" border="1" width="380">
+    <table class="followedUsers-table" cellspacing="0" cellpadding="1" width="380">
       <colgroup>
         <col span="1" style="width: 75%;">
         <col span="1" style="width: 15%;">
       </colgroup>
       <tr *ngFor="let user of followedUsers">
-        <td style="padding-left: 5pt">{{user.email}}</td>
+        <td style="padding-left: 5pt">{{user.username}}</td>
         <td style="text-align: center">
           <button (click)="unfollowUser(user)">Unfollow</button>
         </td>

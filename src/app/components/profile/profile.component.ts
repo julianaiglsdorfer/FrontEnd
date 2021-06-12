@@ -5,6 +5,7 @@ import {Observable} from "rxjs";
 import {Neo4jUser} from "../../models/neo4jUser";
 import {FollowerApiService} from "../../services/follower-api.service";
 import {Posting} from "../../models/posting";
+import {User} from "../../models/user";
 
 @Component({
   selector: 'app-profile',
@@ -13,15 +14,17 @@ import {Posting} from "../../models/posting";
 })
 export class ProfileComponent implements OnInit {
   followedUsers: Neo4jUser[] = [];
+  currentUser: User;
 
   constructor(public authentificationService: AuthentificationService,
               private userApiService: UserApiService,
-              private followerApiService: FollowerApiService) {}
+              private followerApiService: FollowerApiService) {
+    this.currentUser = this.authentificationService.currentUserValue;
+  }
 
   ngOnInit() {
-    this.followerApiService.getFollowedUsers(this.authentificationService.currentUserValue.username).subscribe(
-      response => this.handleSuccessfulResponse(response),
-    );
+    this.followerApiService.getFollowedUsers(this.authentificationService.currentUserValue.username);
+    this.followerApiService.$followedNeo4jUsers.subscribe(users => this.followedUsers = users);
   }
 
   handleSuccessfulResponse(response: Neo4jUser[]) {
@@ -30,10 +33,11 @@ export class ProfileComponent implements OnInit {
 
   unfollowUser(targetUser: Neo4jUser) {
     console.error('unfollowing user ' + targetUser);
-    if (this.followerApiService.removeFollowRelationship(targetUser, targetUser)) {
-      this.followerApiService.getFollowedUsers(this.authentificationService.currentUserValue.username).subscribe(
-        response => this.handleSuccessfulResponse(response),
-      );
+    const sourceUser: Neo4jUser = this.authentificationService.currentNeo4jUserValue;
+    if (this.followerApiService.removeFollowRelationship(sourceUser, targetUser)) {
+      // this.followerApiService.getFollowedUsers(this.authentificationService.currentUserValue.username).subscribe(
+      //   response => this.handleSuccessfulResponse(response),
+      // );
     }
   }
 

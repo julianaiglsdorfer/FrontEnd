@@ -3,24 +3,32 @@ import {HttpClient} from "@angular/common/http";
 import {AlertService} from "./alert.service";
 import {Router} from "@angular/router";
 import {User} from "../models/user";
+import {Neo4jUser} from "../models/neo4jUser";
+import {AuthentificationService} from "./authentification.service";
+import {BehaviorSubject} from "rxjs";
 
 @Injectable({
   providedIn: 'root'
 })
 export class UserApiService {
+  $allUsers: BehaviorSubject<User[]>;
+
+  readonly URL_USERSERVICE = "http://localhost:8083";
 
   constructor(private http: HttpClient,
               private alertService: AlertService,
-              private router: Router) { }
+              private router: Router,
+              private authentificationService: AuthentificationService) {
+    this.$allUsers = new BehaviorSubject<User[]>([]);
+  }
 
   register(user: User) {
     this.httpPutRegisterUser(user);
   }
 
   httpPutRegisterUser(user: User) {
-    const URL: string = "http://localhost:8083";
 
-    this.http.put<User>(URL + '/newUser', user, {observe: 'response'})
+    this.http.put<User>(this.URL_USERSERVICE + '/newUser', user, {observe: 'response'})
       .toPromise()
       .then(
         (response) =>{
@@ -39,7 +47,10 @@ export class UserApiService {
           }
         }
       );
+  }
 
-
+  getAllUsersExceptLoggedIn(): void {
+    this.http.get<User[]>(this.URL_USERSERVICE + '/getUsers?loggedInUser=' + this.authentificationService.currentUserValue.username)
+      .subscribe(users => this.$allUsers.next(users));
   }
 }
