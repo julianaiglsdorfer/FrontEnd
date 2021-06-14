@@ -62,6 +62,7 @@ export class HomeComponent implements OnInit {
 
   toggleEmojiPicker() {
     this.toggled = !this.toggled;
+    console.log("function called");
   }
 
   addEmoji(selected: EmojiEvent) {
