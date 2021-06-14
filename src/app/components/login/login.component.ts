@@ -3,6 +3,7 @@ import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {ActivatedRoute, Router} from "@angular/router";
 import {AlertService} from "../../services/alert.service";
 import {AuthentificationService} from "../../services/authentification.service";
+import {ToastrService} from "ngx-toastr";
 
 @Component({
   selector: 'app-login',
@@ -20,7 +21,8 @@ export class LoginComponent implements OnInit {
     private route: ActivatedRoute,
     private router: Router,
     private authentificationService: AuthentificationService,
-    private alertService: AlertService
+    private alertService: AlertService,
+    private toastr: ToastrService
   ) {
     this.loginForm = this.formBuilder.group({
       username: ['', Validators.required],
@@ -50,11 +52,13 @@ export class LoginComponent implements OnInit {
     // stop here if form is invalid
     if (this.loginForm.invalid) {
       return;
+      this.toastr.error("Login geschietert", "ERROR");
     }
 
     this.loading = true;
     this.authentificationService.login(this.f.username.value, this.f.password.value);
     this.loading = false;
+    this.toastr.success('Erfolgreich eingeloggt!', 'Success');
   }
 
 }

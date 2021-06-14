@@ -20,6 +20,9 @@ import { NavbarComponent } from './components/navbar/navbar.component';
 import { ProfileComponent } from './components/profile/profile.component';
 //import { PostItemComponent } from './components/post-item/post-item.component';
 
+//Imports Toasting Service
+import { ToastrModule } from 'ngx-toastr';
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -41,7 +44,8 @@ import { ProfileComponent } from './components/profile/profile.component';
     BrowserAnimationsModule,
     MatButtonModule,
     MatIconModule,
-    PickerModule
+    PickerModule,
+    ToastrModule.forRoot()
   ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },

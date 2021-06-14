@@ -6,6 +6,7 @@ import {UserApiService} from "../../services/user-api.service";
 import {AuthentificationService} from "../../services/authentification.service";
 import {User} from "../../models/user";
 import {Emoji, EmojiEvent} from "@ctrl/ngx-emoji-mart/ngx-emoji";
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-home',
@@ -27,7 +28,8 @@ export class HomeComponent implements OnInit {
     private postingApiService: PostingApiService,
     private userApiService: UserApiService,
     private formBuilder: FormBuilder,
-    public authentificationService: AuthentificationService
+    public authentificationService: AuthentificationService,
+    private toastr: ToastrService
   ) {
     this.currentUser = authentificationService.currentUserValue;
   }
@@ -58,11 +60,11 @@ export class HomeComponent implements OnInit {
 
     this.postingApiService.addPosting(newPosting);
     this.postingForm.reset();
+    this.toastr.success('Post wurde erfolgreich abgesetzt!', 'Success');
   }
 
   toggleEmojiPicker() {
     this.toggled = !this.toggled;
-    console.log("function called");
   }
 
   addEmoji(selected: EmojiEvent) {
