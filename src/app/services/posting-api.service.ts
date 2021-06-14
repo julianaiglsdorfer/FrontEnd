@@ -23,8 +23,8 @@ export class PostingApiService {
   }
 
   addPosting(posting: Posting) {
-    this.http.put<Posting>('http://localhost:8082/addPosting', posting);
-    this.getPostings();
+    this.http.put<Posting>('http://localhost:8082/addPosting', posting)
+      .subscribe( post => this.getPostings());
   }
 
 }
