@@ -47,26 +47,13 @@ export class HomeComponent implements OnInit {
   }
 
   searchPostings($event: Event): void {
-    // this.postingApiService.getPostingsWithFilter(this.searchValue).subscribe(
-    //   response => this.handleSuccessfulResponse(response),
-    // );
-    if (this.searchValue === '') {
+    if (this.searchValue ==='') {
       this.postingApiService.getPostings();
+    } else {
+      this.postingApiService.getPostingsWithFilter(this.searchValue).subscribe(
+        response => this.handleSuccessfulResponse(response),
+      );
     }
-    const filteredPostings = this.postingApiService.$postings.getValue().filter(posting => {
-      if (posting.content.toLowerCase().includes(this.searchValue.toLowerCase())) {
-        return true;
-      }
-      if (posting.userId.toLowerCase().includes(this.searchValue.toLowerCase())) {
-        return true;
-      }
-      if (posting.emotion.toLowerCase().includes(this.searchValue.toLowerCase())) {
-        return true;
-      }
-      return false;
-    });
-
-    this.postingApiService.$postings.next(filteredPostings);
   }
 
   addPosting() {
