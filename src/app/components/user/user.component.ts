@@ -24,7 +24,21 @@ export class UserComponent implements OnInit {
 
   ngOnInit(): void {
     this.userApiService.getAllUsersExceptLoggedIn();
-    this.userApiService.$allUsers.subscribe(allUsers => this.users = allUsers);
+    this.userApiService.$allUsers.subscribe(allUsers => {
+      this.users = allUsers.filter( user => !this.userAlreadyFollowed(user))
+    });
+  }
+
+  userAlreadyFollowed(user: User): boolean {
+
+    let isFollowed: boolean = false;
+    this.followerApiService.$followedNeo4jUsers.value
+      .forEach( u => {
+        if (u.username === user.username) {
+          isFollowed = true;
+        }
+      });
+    return isFollowed;
   }
 
   followUser(targetUser: User) {
@@ -36,6 +50,7 @@ export class UserComponent implements OnInit {
     };
 
     this.followerApiService.addFollowRelationship(fromUser, toUser);
+    this.userApiService.getAllUsersExceptLoggedIn();
   }
 
 }

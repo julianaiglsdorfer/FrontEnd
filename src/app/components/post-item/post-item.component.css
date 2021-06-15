@@ -1,0 +1,43 @@
+/*.post-item {*/
+/*  width: 600px;*/
+/*  height: 100px;*/
+/*}*/
+.user {
+  grid-area: user;
+  text-align: center;
+  font-size: 20px;
+}
+.emotion {
+  grid-area: emotion;
+  font-size: 30px;
+  margin: auto;
+  /*text-align: center;*/
+}
+.date {
+  grid-area: date;
+  text-indent: 10pt;
+}
+.content {
+  grid-area: content;
+  font-size: 15px;
+  text-indent: 10px;
+}
+
+.post-item {
+  border: 0.5pt solid lightsteelblue;
+  border-radius: 5px;
+  display: grid;
+  grid-template-areas:
+    'emotion user user user date date'
+    'emotion content content content content content'
+    'emotion content content content content content';
+  grid-gap: 5px;
+  background-color: whitesmoke;
+  padding: 5px;
+}
+
+.post-item > div {
+  /*background-color: rgba(255, 255, 255, 0.8);*/
+  padding: 10px 0;
+/*  font-size: 30px;*/
+}

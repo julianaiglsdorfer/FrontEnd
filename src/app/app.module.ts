@@ -22,19 +22,21 @@ import { ProfileComponent } from './components/profile/profile.component';
 
 //Imports Toasting Service
 import { ToastrModule } from 'ngx-toastr';
+import {PostItemComponent} from "./components/post-item/post-item.component";
 
 @NgModule({
-  declarations: [
-    AppComponent,
-    HomeComponent,
-    LoginComponent,
-    RegisterComponent,
-    UserComponent,
-    AlertComponent,
-    NavbarComponent,
-    ProfileComponent,
-    //PostItemComponent
-  ],
+    declarations: [
+        AppComponent,
+        HomeComponent,
+        LoginComponent,
+        RegisterComponent,
+        UserComponent,
+        AlertComponent,
+        NavbarComponent,
+        ProfileComponent,
+        PostItemComponent,
+        //PostItemComponent
+    ],
   imports: [
     BrowserModule,
     AppRoutingModule,

@@ -13,8 +13,7 @@ export class FollowerApiService {
 
   readonly URL_FOLLOWERSERVICE = 'http://localhost:8081/followservice';
 
-  constructor(private httpClient: HttpClient,
-              private authentificationService: AuthentificationService) {
+  constructor(private httpClient: HttpClient) {
     this.$followedNeo4jUsers = new BehaviorSubject<Neo4jUser[]>([]);
   }
 
@@ -38,7 +37,8 @@ export class FollowerApiService {
   addFollowRelationship(fromUser: Neo4jUser, toUser: Neo4jUser): boolean {
 
     const users: Neo4jUser[] = [fromUser, toUser];
-    this.httpClient.post(this.URL_FOLLOWERSERVICE + '/addRelationship', users).subscribe((response) => console.error(response));
+    this.httpClient.post(this.URL_FOLLOWERSERVICE + '/addRelationship', users)
+      .subscribe((response) => this.getFollowedUsers(fromUser.username));
     // TODO check HTTP status
     return true;
   }
@@ -46,9 +46,9 @@ export class FollowerApiService {
   removeFollowRelationship(fromUser: Neo4jUser, toUser: Neo4jUser): boolean {
 
     const users: Neo4jUser[] = [fromUser, toUser];
-    this.httpClient.post(this.URL_FOLLOWERSERVICE + '/removeRelationship', users).subscribe((response) => console.error(response));
+    this.httpClient.post(this.URL_FOLLOWERSERVICE + '/removeRelationship', users)
+      .subscribe((response) =>  this.getFollowedUsers(fromUser.username));
     // TODO check HTTP status
-    this.getFollowedUsers(fromUser.username);
     return true;
   }
 }

@@ -7,6 +7,7 @@ import {AuthentificationService} from "../../services/authentification.service";
 import {User} from "../../models/user";
 import {Emoji, EmojiEvent} from "@ctrl/ngx-emoji-mart/ngx-emoji";
 import { ToastrService } from 'ngx-toastr';
+import {FollowerApiService} from "../../services/follower-api.service";
 
 @Component({
   selector: 'app-home',
@@ -29,13 +30,15 @@ export class HomeComponent implements OnInit {
     private userApiService: UserApiService,
     private formBuilder: FormBuilder,
     public authentificationService: AuthentificationService,
-    private toastr: ToastrService
+    private toastr: ToastrService,
+    private followerApiService: FollowerApiService
   ) {
     this.currentUser = authentificationService.currentUserValue;
   }
 
   ngOnInit() {
-    this.postingApiService.getPostings();
+    this.followerApiService.getFollowedUsers(this.currentUser.username);
+    this.followerApiService.$followedNeo4jUsers.subscribe( u => this.postingApiService.getPostings());
     this.postingApiService.$postings.subscribe(allPostings => this.postings = allPostings);
   }
 
@@ -44,10 +47,26 @@ export class HomeComponent implements OnInit {
   }
 
   searchPostings($event: Event): void {
-    console.error(this.searchValue);
-    this.postingApiService.getPostingsWithFilter(this.searchValue).subscribe(
-      response => this.handleSuccessfulResponse(response),
-    );
+    // this.postingApiService.getPostingsWithFilter(this.searchValue).subscribe(
+    //   response => this.handleSuccessfulResponse(response),
+    // );
+    if (this.searchValue === '') {
+      this.postingApiService.getPostings();
+    }
+    const filteredPostings = this.postingApiService.$postings.getValue().filter(posting => {
+      if (posting.content.toLowerCase().includes(this.searchValue.toLowerCase())) {
+        return true;
+      }
+      if (posting.userId.toLowerCase().includes(this.searchValue.toLowerCase())) {
+        return true;
+      }
+      if (posting.emotion.toLowerCase().includes(this.searchValue.toLowerCase())) {
+        return true;
+      }
+      return false;
+    });
+
+    this.postingApiService.$postings.next(filteredPostings);
   }
 
   addPosting() {
