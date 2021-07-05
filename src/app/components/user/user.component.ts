@@ -3,8 +3,9 @@ import {User} from "../../models/user";
 import {Neo4jUser} from "../../models/neo4jUser";
 import {UserApiService} from "../../services/user-api.service";
 import {FollowerApiService} from "../../services/follower-api.service";
-import {BehaviorSubject} from "rxjs";
 import {AuthentificationService} from "../../services/authentification.service";
+import {ToastrService} from "ngx-toastr";
+
 
 @Component({
   selector: 'app-user',
@@ -18,7 +19,8 @@ export class UserComponent implements OnInit {
   constructor(
     private userApiService: UserApiService,
     private followerApiService: FollowerApiService,
-    private authentificationService: AuthentificationService
+    private authentificationService: AuthentificationService,
+    private toastr: ToastrService
   ) {
   }
 
@@ -51,6 +53,7 @@ export class UserComponent implements OnInit {
 
     this.followerApiService.addFollowRelationship(fromUser, toUser);
     this.userApiService.getAllUsersExceptLoggedIn();
+    this.toastr.success('Following worked!', 'Success');
   }
 
 }

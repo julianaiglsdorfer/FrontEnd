@@ -1,11 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {AuthentificationService} from "../../services/authentification.service";
 import {UserApiService} from "../../services/user-api.service";
-import {Observable} from "rxjs";
 import {Neo4jUser} from "../../models/neo4jUser";
 import {FollowerApiService} from "../../services/follower-api.service";
-import {Posting} from "../../models/posting";
 import {User} from "../../models/user";
+import {ToastrService} from "ngx-toastr";
 
 @Component({
   selector: 'app-profile',
@@ -18,6 +17,7 @@ export class ProfileComponent implements OnInit {
 
   constructor(public authentificationService: AuthentificationService,
               private userApiService: UserApiService,
+              private toastr: ToastrService,
               private followerApiService: FollowerApiService) {
     this.currentUser = this.authentificationService.currentUserValue;
   }
@@ -34,11 +34,8 @@ export class ProfileComponent implements OnInit {
   unfollowUser(targetUser: Neo4jUser) {
     console.error('unfollowing user ' + targetUser);
     const sourceUser: Neo4jUser = this.authentificationService.currentNeo4jUserValue;
-    if (this.followerApiService.removeFollowRelationship(sourceUser, targetUser)) {
-      // this.followerApiService.getFollowedUsers(this.authentificationService.currentUserValue.username).subscribe(
-      //   response => this.handleSuccessfulResponse(response),
-      // );
-    }
+    this.followerApiService.removeFollowRelationship(sourceUser, targetUser);
+    this.toastr.success('Unfollowed user ' + targetUser.username, 'Success');
   }
 
 }

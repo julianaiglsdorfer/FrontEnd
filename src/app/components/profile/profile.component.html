@@ -15,28 +15,22 @@
     </tr>
   </table>
   <h3><span style="font-weight:bold">Followed users</span></h3>
-<!--  <div style="width:400px; height:200px; overflow:auto;">-->
-<!--    <table class="followedUsers-table" cellspacing="0" cellpadding="1" width="380">-->
   <div class="tablecontainer" style="width:400px; height:400px; overflow:auto;">
     <table class="table table-hover">
       <thead>
-        <tr><th>Username</th></tr>
+      <tr>
+        <th>Username</th>
+        <th>Aktion</th>
+      </tr>
       </thead>
       <tbody>
-<!--        <colgroup>-->
-<!--          <col span="1" style="width: 75%;">-->
-<!--          <col span="1" style="width: 15%;">-->
-<!--        </colgroup>-->
-        <tr *ngFor="let user of followedUsers">
-<!--          <td style="padding-left: 5pt"><span>{{user.username}}</span></td>-->
-<!--          <td style="text-align: center">-->
-          <td><span>{{user.username}}</span></td>
-          <td>
-            <span><button (click)="unfollowUser(user)">Unfollow</button></span>
-          </td>
-        </tr>
+      <tr *ngFor="let user of followedUsers">
+        <td><span>{{user.username}}</span></td>
+        <td>
+          <span><button (click)="unfollowUser(user)">Unfollow</button></span>
+        </td>
+      </tr>
       </tbody>
-
     </table>
   </div>
 </div>
